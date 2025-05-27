@@ -1,94 +1,39 @@
--- SnîpęrX HūB 🇧🇷 by PHGS
-
 local ScreenGui = Instance.new("ScreenGui")
 local Main = Instance.new("Frame")
-local UICorner = Instance.new("UICorner")
-local UIGrid = Instance.new("UIGridLayout")
-local title = Instance.new("TextLabel")
+local CopySkins = Instance.new("TextButton")
 
--- Botões
-local buttons = {
-    {Text="Kill All", Func=function()
-        for _,v in pairs(game.Players:GetPlayers()) do
-            if v ~= game.Players.LocalPlayer and v.Character and v.Character:FindFirstChild("Humanoid") then
-                v.Character.Humanoid.Health = 0
-            end
-        end
-    end},
-    {Text="ESP Players", Func=function()
-        for _,v in pairs(game.Players:GetPlayers()) do
-            if v ~= game.Players.LocalPlayer and v.Character then
-                local box = Instance.new("BillboardGui", v.Character)
-                box.Size = UDim2.new(0,100,0,40)
-                box.AlwaysOnTop = true
-                local tag = Instance.new("TextLabel", box)
-                tag.Text = v.Name
-                tag.Size = UDim2.new(1,0,1,0)
-                tag.BackgroundTransparency = 1
-                tag.TextColor3 = Color3.new(1,0,0)
-                tag.TextScaled = true
-            end
-        end
-    end},
-    {Text="TP All to Me", Func=function()
-        local root = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-        for _,v in pairs(game.Players:GetPlayers()) do
-            if v ~= game.Players.LocalPlayer and v.Character then
-                v.Character:SetPrimaryPartCFrame(root.CFrame + Vector3.new(math.random(-5,5), 0, math.random(-5,5)))
-            end
-        end
-    end},
-    {Text="Speed x3", Func=function()
-        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 48
-    end},
-    {Text="Fly", Func=function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/BladeTheWarrior/FlyGui/main/FlyGui.lua"))()
-    end},
-    {Text="Destroy GUI", Func=function()
-        ScreenGui:Destroy()
-    end},
-}
+-- Propriedades do ScreenGui
+ScreenGui.Name = "CopySkinsGUI"
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
--- Interface
-ScreenGui.Name = "SniperX_HUB"
-ScreenGui.Parent = game.CoreGui
-
+-- Propriedades do Frame principal
 Main.Name = "Main"
 Main.Parent = ScreenGui
-Main.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-Main.Position = UDim2.new(0.05, 0, 0.1, 0)
-Main.Size = UDim2.new(0, 320, 0, 400)
+Main.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 Main.BorderSizePixel = 0
-Main.BackgroundTransparency = 0.1
+Main.Position = UDim2.new(0.5, -100, 0.5, -50)
+Main.Size = UDim2.new(0, 200, 0, 100)
 
-UICorner.CornerRadius = UDim.new(0, 12)
-UICorner.Parent = Main
+-- Botão Copy Skins
+CopySkins.Name = "CopySkins"
+CopySkins.Parent = Main
+CopySkins.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+CopySkins.BorderSizePixel = 0
+CopySkins.Position = UDim2.new(0.1, 0, 0.4, 0)
+CopySkins.Size = UDim2.new(0.8, 0, 0.4, 0)
+CopySkins.Font = Enum.Font.GothamBold
+CopySkins.Text = "Copy Skins"
+CopySkins.TextColor3 = Color3.fromRGB(255, 255, 255)
+CopySkins.TextSize = 14.000
 
-title.Name = "Title"
-title.Parent = Main
-title.Size = UDim2.new(1, 0, 0, 40)
-title.BackgroundTransparency = 1
-title.Text = "SnîpęrX HūB 🇧🇷"
-title.TextScaled = true
-title.TextColor3 = Color3.fromRGB(255, 0, 0)
-title.Font = Enum.Font.FredokaOne
-
-UIGrid.Parent = Main
-UIGrid.SortOrder = Enum.SortOrder.LayoutOrder
-UIGrid.CellSize = UDim2.new(0.48, 0, 0.15, 0)
-UIGrid.CellPadding = UDim2.new(0.02, 0, 0.02, 0)
-
--- Criar botões
-for _,btn in ipairs(buttons) do
-    local b = Instance.new("TextButton")
-    b.Text = btn.Text
-    b.Font = Enum.Font.GothamBold
-    b.TextScaled = true
-    b.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-    b.TextColor3 = Color3.fromRGB(255, 255, 255)
-    b.Parent = Main
-    local ui = Instance.new("UICorner")
-    ui.CornerRadius = UDim.new(0, 8)
-    ui.Parent = b
-    b.MouseButton1Click:Connect(btn.Func)
-end
+-- Função ao clicar no botão
+CopySkins.MouseButton1Click:Connect(function()
+    local skins = ""
+    for i, v in pairs(game:GetService("Players").LocalPlayer.Backpack:GetChildren()) do
+        if v:IsA("Tool") then
+            skins = skins .. v.Name .. "\n"
+        end
+    end
+    setclipboard(skins)
+end)
