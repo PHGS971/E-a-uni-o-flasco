@@ -1,0 +1,94 @@
+-- SnîpęrX HūB 🇧🇷 by PHGS
+
+local ScreenGui = Instance.new("ScreenGui")
+local Main = Instance.new("Frame")
+local UICorner = Instance.new("UICorner")
+local UIGrid = Instance.new("UIGridLayout")
+local title = Instance.new("TextLabel")
+
+-- Botões
+local buttons = {
+    {Text="Kill All", Func=function()
+        for _,v in pairs(game.Players:GetPlayers()) do
+            if v ~= game.Players.LocalPlayer and v.Character and v.Character:FindFirstChild("Humanoid") then
+                v.Character.Humanoid.Health = 0
+            end
+        end
+    end},
+    {Text="ESP Players", Func=function()
+        for _,v in pairs(game.Players:GetPlayers()) do
+            if v ~= game.Players.LocalPlayer and v.Character then
+                local box = Instance.new("BillboardGui", v.Character)
+                box.Size = UDim2.new(0,100,0,40)
+                box.AlwaysOnTop = true
+                local tag = Instance.new("TextLabel", box)
+                tag.Text = v.Name
+                tag.Size = UDim2.new(1,0,1,0)
+                tag.BackgroundTransparency = 1
+                tag.TextColor3 = Color3.new(1,0,0)
+                tag.TextScaled = true
+            end
+        end
+    end},
+    {Text="TP All to Me", Func=function()
+        local root = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+        for _,v in pairs(game.Players:GetPlayers()) do
+            if v ~= game.Players.LocalPlayer and v.Character then
+                v.Character:SetPrimaryPartCFrame(root.CFrame + Vector3.new(math.random(-5,5), 0, math.random(-5,5)))
+            end
+        end
+    end},
+    {Text="Speed x3", Func=function()
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 48
+    end},
+    {Text="Fly", Func=function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/BladeTheWarrior/FlyGui/main/FlyGui.lua"))()
+    end},
+    {Text="Destroy GUI", Func=function()
+        ScreenGui:Destroy()
+    end},
+}
+
+-- Interface
+ScreenGui.Name = "SniperX_HUB"
+ScreenGui.Parent = game.CoreGui
+
+Main.Name = "Main"
+Main.Parent = ScreenGui
+Main.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+Main.Position = UDim2.new(0.05, 0, 0.1, 0)
+Main.Size = UDim2.new(0, 320, 0, 400)
+Main.BorderSizePixel = 0
+Main.BackgroundTransparency = 0.1
+
+UICorner.CornerRadius = UDim.new(0, 12)
+UICorner.Parent = Main
+
+title.Name = "Title"
+title.Parent = Main
+title.Size = UDim2.new(1, 0, 0, 40)
+title.BackgroundTransparency = 1
+title.Text = "SnîpęrX HūB 🇧🇷"
+title.TextScaled = true
+title.TextColor3 = Color3.fromRGB(255, 0, 0)
+title.Font = Enum.Font.FredokaOne
+
+UIGrid.Parent = Main
+UIGrid.SortOrder = Enum.SortOrder.LayoutOrder
+UIGrid.CellSize = UDim2.new(0.48, 0, 0.15, 0)
+UIGrid.CellPadding = UDim2.new(0.02, 0, 0.02, 0)
+
+-- Criar botões
+for _,btn in ipairs(buttons) do
+    local b = Instance.new("TextButton")
+    b.Text = btn.Text
+    b.Font = Enum.Font.GothamBold
+    b.TextScaled = true
+    b.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+    b.TextColor3 = Color3.fromRGB(255, 255, 255)
+    b.Parent = Main
+    local ui = Instance.new("UICorner")
+    ui.CornerRadius = UDim.new(0, 8)
+    ui.Parent = b
+    b.MouseButton1Click:Connect(btn.Func)
+end
